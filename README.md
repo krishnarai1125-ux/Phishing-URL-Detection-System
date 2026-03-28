@@ -1,44 +1,50 @@
-Fake News Classification CLI
+Phishing URL Detector (ML Project)
 
-Developer: Krishna Rai
+By: Krishna Rai
 
-Registration: 25BAI11298
+Reg No: 25BAI11298
 
-A command-line application for detecting fake news using machine learning. This tool uses TF-IDF features and a Logistic Regression classifier to evaluate text authenticity.
-Installation & Setup
+This is a tool I put together to help identify if a website link is actually a phishing threat. Instead of just looking up a database of known bad sites, it uses Machine Learning (Logistic Regression) to analyze the URL's structure and predict if it’s dangerous.
+What's in this repo?
 
-    Clone the repository:
-    Bash
+    threat_scanner.py: This is the main script. It handles all the data loading, training, and has the command-line interface.
 
-    git clone <your-repo-link>
-    cd fake_news_project
+    streamlit_app.py: I built this to give the project a proper web UI. It shows the accuracy and a heatmap of the results.
 
-    Install dependencies:
-    Bash
+    phishing_site_urls.csv.xz: This is the dataset. I used LZMA compression so the file stays under 7MB, otherwise GitHub wouldn't let me upload the full 30MB raw CSV.
 
-    pip install -r requirements.txt
+Getting Started
+1. Install what's needed
 
-    Extract Dataset:
-    The datasets are compressed to comply with repository size limits. Please extract data/datasets.zip into the data/ directory so that True.csv and Fake.csv are visible to the application.
+You'll need a few Python libraries to run this. Just run:
+PowerShell
 
-Usage
-Training the Model
+pip install -r requirements.txt
 
-Train the classifier on your local data to generate the necessary .joblib artifacts:
-Bash
+2. Running the Terminal Scanner
 
-python main.py train
+If you just want a quick check without opening a browser, use the CLI:
+PowerShell
 
-Making Predictions
+# To check one link
+python threat_scanner.py "https://suspicious-site.com"
 
-To test a specific news headline:
-Bash
+# To enter interactive mode (best for testing many links)
+python threat_scanner.py
 
-python main.py predict --text "Your headline here"
+3. Running the Web Dashboard
 
-Web Interface
-
-For a visual experience, launch the Streamlit dashboard:
-Bash
+To see the confusion matrix and the "Risk Tier" breakdown in your browser:
+PowerShell
 
 streamlit run streamlit_app.py
+
+A few notes on how it works
+
+    In-Memory Training: To keep things simple, the model trains from scratch every time you start the app. It takes about 20-30 seconds depending on your CPU, but it means you don't have to mess around with saving/loading .pkl files.
+
+    The Math: I used TF-IDF to turn the URLs into numbers. It basically ignores common stuff like "www" and focuses on words that frequently show up in scams (like "login" or "verify").
+
+    Compression: The code is set up to read the .xz file directly using Pandas, so there's no need to unzip anything yourself.
+
+Krishna Rai | B.Tech CSE (AI/ML) | VIT Bhopal
