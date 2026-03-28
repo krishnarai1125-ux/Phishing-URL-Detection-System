@@ -1,76 +1,44 @@
-# Phishing URL Threat Scanner
+Fake News Classification CLI
 
-A small command-line tool that trains a **TF-IDF + logistic regression** classifier on labeled URLs, reports hold-out accuracy, and scores new URLs as phishing or safe with probability estimates.
+Developer: Krishna Rai
 
-## Requirements
+Registration: 25BAI11298
 
-- Python 3.10+ recommended (tested with Python 3.14)
-- Dependencies: `pandas`, `scikit-learn`, `streamlit` (for the web UI)
+A command-line application for detecting fake news using machine learning. This tool uses TF-IDF features and a Logistic Regression classifier to evaluate text authenticity.
+Installation & Setup
 
-## Setup
+    Clone the repository:
+    Bash
 
-From the project folder:
+    git clone <your-repo-link>
+    cd fake_news_project
 
-```bash
-pip install -r requirements.txt
-```
+    Install dependencies:
+    Bash
 
-On Windows, if `python` is not on your PATH, use the launcher:
+    pip install -r requirements.txt
 
-```powershell
-py -3 -m pip install -r requirements.txt
-```
+    Extract Dataset:
+    The datasets are compressed to comply with repository size limits. Please extract data/datasets.zip into the data/ directory so that True.csv and Fake.csv are visible to the application.
 
-## Data
+Usage
+Training the Model
 
-Place `phishing_site_urls.csv` in the same directory as `threat_scanner.py`. The file must include columns:
+Train the classifier on your local data to generate the necessary .joblib artifacts:
+Bash
 
-- `URL` — the URL string  
-- `Label` — `bad` (phishing) or `good` (safe)
+python main.py train
 
-The script resolves this path from the script location, so you can run it from any working directory.
+Making Predictions
 
-## Usage
+To test a specific news headline:
+Bash
 
-**Interactive mode** (train, then prompt for URLs until you type `exit` or press Ctrl+C):
+python main.py predict --text "Your headline here"
 
-```bash
-python threat_scanner.py
-```
+Web Interface
 
-**Single URL** (train once, print one result, then exit):
+For a visual experience, launch the Streamlit dashboard:
+Bash
 
-```bash
-python threat_scanner.py "https://example.com/some/path"
-```
-
-Windows example:
-
-```powershell
-py -3 threat_scanner.py "https://www.google.com"
-```
-
-### Web UI (Streamlit) — good for screenshots
-
-From the project folder, start the app (it opens in your browser, usually at http://localhost:8501):
-
-```powershell
-py -3 -m streamlit run streamlit_app.py
-```
-
-The model trains **once** on first load (cached for the session). Use **Analyze URL** or **Try example (safe)** to fill the result panel, then capture the window with Snipping Tool (**Win + Shift + S**) or your browser’s screenshot feature. The page also shows a **hold-out confusion matrix** (same 80/20 split as the CLI).
-
-## How it works
-
-1. Load and label the CSV (`bad` → `PHISHING`, `good` → `SAFE`).  
-2. Split 80% train / 20% test.  
-3. Tokenize each URL on non-word characters, remove English stop words in the tokenizer, then apply TF-IDF.  
-4. Train `LogisticRegression` and print validation accuracy.  
-5. For each query URL, show estimated P(phishing), P(safe), and a simple risk tier (critical / elevated / minimal).  
-6. After training, print a **confusion matrix** on the terminal (rows = true label, columns = predicted); Streamlit plots the same matrix as a heatmap.
-
-Training time depends on dataset size; very large CSV files may take several minutes and significant RAM.
-
-## Limitations
-
-This is a **statistical URL-pattern** model, not a live browser or DNS check. It can misclassify novel or obfuscated URLs. Use as a helper signal alongside other security practices, not as the only control.
+streamlit run streamlit_app.py
