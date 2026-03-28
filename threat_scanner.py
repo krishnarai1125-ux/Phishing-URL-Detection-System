@@ -8,7 +8,6 @@ from sklearn.feature_extraction.text import ENGLISH_STOP_WORDS, TfidfVectorizer
 from sklearn.linear_model import LogisticRegression
 from sklearn.metrics import accuracy_score, confusion_matrix
 
-# --- TERMINAL FORMATTING ---
 class Log:
     OK = '\033[92m'
     WARN = '\033[93m'
@@ -24,7 +23,6 @@ def print_header():
     print("-" * 50)
     print(f"{Log.RESET}")
 
-# --- FEATURE EXTRACTION ---
 def tokenize_url(url):
     """Splits URL string into tokens; drops English stop words (custom analyzer)."""
     raw = [t for t in re.split(r"\W+", str(url).lower()) if t]
@@ -34,7 +32,6 @@ def tokenize_url(url):
 SCRIPT_DIR = Path(__file__).resolve().parent
 DATASET_PATH = SCRIPT_DIR / "phishing_site_urls.csv"
 
-# --- MAIN PIPELINE ---
 def build_and_train_model(*, verbose: bool = True):
     if verbose:
         print_header()
@@ -143,7 +140,6 @@ def print_classification(model, vectorizer, target_url):
     print("-" * 50 + "\n")
 
 
-# --- INTERACTIVE SCANNER ---
 def run_scanner(model, vectorizer):
     print(f"{Log.BOLD}--- Interactive Analysis Mode ---{Log.RESET}")
     print("Enter a URL to analyze. Type 'exit' to terminate.\n")
